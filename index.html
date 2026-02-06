@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GROUP 1 LIFELABS</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --accent:#a2ff6c;
+  --muted:#e0e0d1;
+  --panel-dark: rgba(30,30,30,0.5);
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Press Start 2P', monospace;
+  color: var(--muted);
+  background: url("https://i.postimg.cc/bw9RVs8H/a8XLIF7.gif") no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+}
+
+html::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: -1;
+}
+
+#intro {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 16px;
+  z-index: 999;
+  transition: opacity 0.6s;
+}
+#unlockBtn {
+  margin-top: 20px;
+  padding: 14px 28px;
+  font-family: 'Press Start 2P', monospace;
+  font-weight: bold;
+  font-size: 14px;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+#unlockBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px var(--accent);
+}
+
+
+.topbar{
+  position: sticky;
+  top:0;
+  z-index:60;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 36px;
+  background:linear-gradient(0deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2));
+  border-bottom: 2px solid #000;
+}
+.brand{
+  display:flex;
+  gap:14px;
+  align-items:center;
+}
+.brand .logo-blob{
+  width:36px;
+  height:36px;
+  border-radius:0;
+  background:linear-gradient(45deg,var(--accent),#b3e0ff);
+  box-shadow:0 6px 18px rgba(167,139,250,0.12);
+  animation: wiggle 3s infinite ease-in-out;
+}
+.brand h1{
+  font-size:18px;
+  margin:0;
+  font-weight:800;
+  letter-spacing:0.6px;
+}
+.navlinks{
+  display:flex;
+  gap:22px;
+  align-items:center;
+}
+.navlinks a{
+  font-weight:600;
+  color:var(--muted);
+  font-size:13px;
+  padding:8px 10px;
+  border-radius:0;
+  border:2px solid #000;
+  transition:all .18s;
+}
+.navlinks a:hover{
+  background:rgba(0,0,0,0.2);
+  transform:translateY(-2px);
+}
+
+
+.hero{position:relative;padding:28px 4vw 40px;overflow:hidden;}
+.hero-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;height:62vh;min-height:420px;}
+.panel{
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:flex-end;
+  border:2px solid #000;
+  border-radius:0;
+  cursor:pointer;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.6s;
+  opacity:0;
+  transform: translateY(20px);
+  will-change: transform, opacity, box-shadow;
+}
+.panel.show {
+  opacity:1;
+  transform: translateY(0);
+}
+.panel:hover{
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 0 20px var(--accent);
+}
+.panel .backdrop{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  filter:brightness(.6) saturate(1.1);
+  transform:scale(1.03);
+}
+.panel::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 70%);
+  pointer-events:none;
+}
+
+
+.panel .item-icons{
+  position:absolute;
+  top:4px;
+  right:4px;
+  display:flex;
+  gap:4px;
+  z-index:3;
+}
+.panel .item-icons img{
+  width:20px;
+  height:20px;
+  transition: transform 0.3s;
+}
+.panel:hover .item-icons img {
+  transform: rotate(15deg) scale(1.2);
+}
+
+
+.panel.break { animation: shake 0.3s; }
+@keyframes shake{
+  0%{transform:translate(0,0);}
+  25%{transform:translate(-3px,2px);}
+  50%{transform:translate(3px,-2px);}
+  75%{transform:translate(-2px,2px);}
+  100%{transform:translate(0,0);}
+}
+
+
+@keyframes wiggle {
+  0%,100%{ transform: rotate(0deg); }
+  25%{ transform: rotate(5deg); }
+  50%{ transform: rotate(-5deg); }
+  75%{ transform: rotate(3deg); }
+}
+
+
+.portrait{
+  position:relative;
+  z-index:5;
+  padding:22px;
+  width:100%;
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-start;
+}
+.portrait .card{
+  display:flex;
+  gap:18px;
+  align-items:center;
+  background:rgba(0,0,0,0.3);
+  padding:12px;
+  border-radius:0;
+  border:2px solid #000;
+  backdrop-filter: blur(2px);
+}
+.portrait img{width:92px;height:130px;object-fit:cover;border-radius:0;box-shadow:0 10px 30px rgba(0,0,0,0.6);}
+.meta .name{font-weight:800;font-size:14px;}
+.meta .role{font-size:12px;opacity:.9;}
+
+
+.talent-grid{
+  padding:40px 4vw 80px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  max-width:1200px;
+  margin:0 auto;
+}
+.talent-card{
+  background:rgba(0,0,0,0.3);
+  padding:18px;
+  border-radius:0;
+  border:2px solid #000;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  text-align:center;
+  opacity:0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+  will-change: transform, opacity, box-shadow;
+}
+.talent-card.show{
+  opacity:1;
+  transform: translateY(0);
+}
+.talent-card:hover{
+  box-shadow: 0 0 30px 6px #a2ff6c, 0 0 60px 12px rgba(162,255,108,0.4);
+  transform: translateY(-6px);
+  transition: all 0.3s ease;
+}
+.talent-card img{width:180px;height:220px;object-fit:cover;border-radius:0;box-shadow:0 12px 30px rgba(6,18,30,0.6);}
+
+h1,h2,h4 {
+  background: linear-gradient(90deg, #a2ff6c, #b3e0ff, #ff6ca2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradientShift 5s infinite linear;
+}
+@keyframes gradientShift {
+  0% {background-position: 0% 50%;}
+  100% {background-position: 200% 50%;}
+}
+
+@media (max-width:980px){}
+@media (max-width:560px){
+  .talent-grid{grid-template-columns:1fr;}
+  .portrait img{width:76px;height:110px;}
+  .brand h1{font-size:15px;}
+  .navlinks{gap:12px;}
+}
+</style>
+</head>
+<body>
+
+
+<div id="intro">
+  <h1>Welcome to GROUP1 LIFELABS</h1>
+  <p>Click the lock to enter</p>
+  <button id="unlockBtn">🔓 Unlock</button>
+</div>
+
+
+<div id="mainSite" style="display:none;">
+<header class="topbar">
+  <div class="brand">
+    <div class="logo-blob"></div>
+    <h1>GROUP 1</h1>
+  </div>
+  <nav class="navlinks">
+    <a href="#about">ABOUT</a>
+    <a href="#talent">STREAMERS</a>
+    <a href="#game">GAME TO PLAY</a>
+    <a href="#schedule">SCHEDULE</a>
+    <a href="#analytics">ANALYTICS</a>
+    <a href="#socials">SOCIALS</a>
+  </nav>
+</header>
+
+<section id="about" style="padding:80px 4vw 40px; text-align:center;">
+  <h1>Welcome to GROUP1 LIFELABS!</h1>
+  <p style="max-width:800px;margin:0 auto;font-size:18px;line-height:1.6;color:#222222;">
+    Dive into the world of our streamers — creative, fun, and always live.<br>
+    From epic gameplay to interactive chats, GROUP 1 brings energy, skill, and community straight to your screens.<br>
+    Watch, join, and experience the hype!
+  </p>
+</section>
+
+
+<main>
+<section class="hero">
+  <div class="hero-grid">
+      
+      <article class="panel">
+      <div class="backdrop" style="background-image:url('https://i.postimg.cc/2SBPCCVX/mhae2.jpg');"></div>
+      <div class="item-icons">
+        <img src="https://i.postimg.cc/HsXZWnWv/output-onlinepngtools.png" alt="pickaxe">
+        <img src="https://i.postimg.cc/HsXZWnWv/output-onlinepngtools.png" alt="sword">
+      </div>
+      <div class="portrait">
+        <div class="card">
+          <img src="https://i.postimg.cc/2SBPCCVX/mhae2.jpg" alt="Member 2 portrait" />
+          <div class="meta">
+            <div class="name">Malazarte Mhae</div>
+            <div class="role">Streamer</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+      <article class="panel">
+        <div class="backdrop" style="background-image:url('https://i.postimg.cc/Pq7pYztW/kim2.jpg');"></div>
+        <div class="item-icons">
+          <img src="https://i.postimg.cc/HsXZWnWv/output-onlinepngtools.png" alt="pickaxe">
+          <img src="https://i.postimg.cc/HsXZWnWv/output-onlinepngtools.png" alt="sword">
+        </div>
+        <div class="portrait">
+          <div class="card">
+            <img src="https://i.postimg.cc/Pq7pYztW/kim2.jpg" alt="Member 2 portrait" />
+            <div class="meta">
+              <div class="name">Kim Yeonah</div>
+              <div class="role">Streamer</div>
+            </div>
+          </div>
+        </div>
+      </article>
+  
+        <article class="panel">
+        <div class="backdrop" style="background-image:url('https://i.postimg.cc/pXjwH296/caleb2.png');"></div>
+        <div class="item-icons">
+          <img src="https://i.postimg.cc/HsXZWnWv/output-onlinepngtools.png" alt="pickaxe">
+          <img src="https://i.postimg.cc/HsXZWnWv/output-onlinepngtools.png" alt="sword">
+        </div>
+        <div class="portrait">
+          <div class="card">
+            <img src="https://i.postimg.cc/pXjwH296/caleb2.png" alt="Member 2 portrait" />
+            <div class="meta">
+              <div class="name">Chebat Caleb</div>
+              <div class="role">Streamer</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+           <article class="panel">
+        <div class="backdrop" style="background-image:url('https://i.postimg.cc/L6jbWNwR/lacson2.webp');"></div>
+        <div class="item-icons">
+          <img src="https://i.postimg.cc/HsXZWnWv/output-onlinepngtools.png" alt="pickaxe">
+          <img src="https://i.postimg.cc/HsXZWnWv/output-onlinepngtools.png" alt="sword">
+        </div>
+        <div class="portrait">
+          <div class="card">
+            <img src="https://i.postimg.cc/L6jbWNwR/lacson2.webp" alt="Member 2 portrait" />
+            <div class="meta">
+              <div class="name">Lacson Juan Carlos</div>
+              <div class="role">Streamer</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+           <article class="panel">
+        <div class="backdrop" style="background-image:url('https://i.postimg.cc/CKDyFS6K/alvarez2.jpg');"></div>
+        <div class="item-icons">
+          <img src="https://i.postimg.cc/HsXZWnWv/output-onlinepngtools.png" alt="pickaxe">
+          <img src="https://i.postimg.cc/HsXZWnWv/output-onlinepngtools.png" alt="sword">
+        </div>
+        <div class="portrait">
+          <div class="card">
+            <img src="https://i.postimg.cc/CKDyFS6K/alvarez2.jpg" alt="Member 2 portrait" />
+            <div class="meta">
+              <div class="name">Alvarez Adrian</div>
+              <div class="role">Streamer</div>
+            </div>
+          </div>
+        </div>
+      </article>
+  </div>
+</section>
+
+<h2 style="text-align:center;margin:60px 0 20px;font-size:28px;font-weight:800;">MEET OUR STREAMERS</h2>
+<section id="talent" class="talent-grid" aria-label="Talent grid">
+  <article class="talent-card">
+    <img src="https://i.postimg.cc/gcQXnKgg/mhae11.webp" alt="Member 1 art">
+    <h4>Mhae</h4>
+    <p>Laughs too loud + thinks too much.</p>
+  </article>
+
+  <article class="talent-card">
+    <img src="https://i.postimg.cc/C1fnwv31/kim1.png" alt="Member 2 art">
+    <h4>Yeonah</h4>
+    <p>Loves horror movies + best singer</p>
+  </article>
+
+  <article class="talent-card">
+    <img src="https://i.postimg.cc/L5p52mkZ/caleb1.png" alt="Member 3 art">
+    <h4>Caleb</h4>
+    <p>I'm Caleb. I like reading, cooking, woodworking, and fashion. I'm just chill like that (no actually I'm bored as hell send help).
+</p>
+  </article>
+
+  <article class="talent-card">
+    <img src="https://i.postimg.cc/RZD0q7QJ/lacson1.webp" alt="Member 4 art">
+    <h4>Juan Carlos</h4>
+    <p>A person that really likes rhythm games for some reason...</p>
+  </article>
+
+  <article class="talent-card">
+    <img src="https://i.postimg.cc/kgBJrV37/alvarez1.webp" alt="Member 5 art">
+    <h4>Adrian</h4>
+    <p>"Your kind,funny and kinda annoying but mostly you're understanding"</p>
+  </article>
+</section>
+
+<section style="display:flex; align-items:flex-start; gap:24px; padding:40px 4vw; flex-wrap:wrap; background:rgba(0,0,0,0.3); border:2px solid #000;">
+
+ <section id="game" style="padding:40px 4vw;color:var(--muted); width:100%;">
+    <h2 style="color:#fff;text-align:center;margin-bottom:18px">THE GAME WE'LL PLAY</h2>
+
+    <div style="display:flex; align-items:flex-start; gap:20px; max-width:800px; margin:0 auto; flex-wrap:wrap;">
+
+      <div style="flex:1.2; min-width:200px;">
+        <img src="https://i.postimg.cc/DZjyydTD/Roblox-(2025)-(App-Icon)-svg.png" alt="Roblox" style="width:100%; border-radius:8px;">
+      </div>
+
+      <div style="flex:2; min-width:250px; font-family:'Press Start 2P', monospace; background-color: rgba(0,0,0,0.6); padding:16px; border-radius:8px;">
+        <h2 style="margin:0 0 12px 0; font-size:18px; text-shadow:0 0 12px #ff7b7b; color:#fff;">-ROBLOX-</h2>
+        <p style="margin:0 0 8px 0; line-height:1.4; text-shadow:0 0 8px #ff7b7b; color:#fff;">
+          Jump into our chaotic Roblox adventure! We'll hop through different games, complete challenges, survive the chaos, and laugh at every unexpected moment — fun, teamwork, and pure energy guaranteed.
+        </p>
+        <br>
+        <p style="margin:0; font-style:italic; color:#ffd1a8; text-shadow:0 0 6px #ffd1a8;">
+          "EVERY ACCOMPLISHMENT STARTS WITH THE DECISION TO TRY" – Roblox
+        </p>
+      </div>
+    </div>
+</section>
+
+    
+<section id="schedule" style="padding:40px 4vw;color:var(--muted)">
+  <h2 style="color:#fff;text-align:center;margin-bottom:18px">STREAM SCHEDULE</h2>
+
+    <div style="
+    max-width:1100px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:18px;
+  ">
+    <div style="background:var(--panel-dark);padding:18px;border-radius:10px">
+      <h4>00:00:00 - 00:10:00</h4>
+      <p><strong>Activity:</strong> Stream setup<br><strong>Time allotment:</strong> 10 minutes</p>
+    </div>
+
+    <div style="background:var(--panel-dark);padding:18px;border-radius:10px">
+      <h4>00:10:00 - 00:15:00</h4>
+      <p><strong>Activity:</strong> Introduction<br><strong>Time allotment:</strong> 5 minutes</p>
+    </div>
+
+    <div style="background:var(--panel-dark);padding:18px;border-radius:10px">
+      <h4>00:15:00 - 01:00:00</h4>
+      <p><strong>Activity:</strong> Minecraft – Gathering resources<br><strong>Time allotment:</strong> 45 minutes</p>
+    </div>
+
+    <div style="background:var(--panel-dark);padding:18px;border-radius:10px">
+      <h4>01:00:00 - 02:00:00</h4>
+      <p><strong>Activity:</strong> Minecraft – Building a base<br><strong>Time allotment:</strong> 60 minutes</p>
+    </div>
+
+    <div style="background:var(--panel-dark);padding:18px;border-radius:10px">
+      <h4>02:00:00 - 03:30:00</h4>
+      <p><strong>Activity:</strong> Minecraft – Yearning for the mines<br><strong>Time allotment:</strong> 90 minutes</p>
+    </div>
+
+    <div style="background:var(--panel-dark);padding:18px;border-radius:10px">
+      <h4>03:30:00 - 03:40:00</h4>
+      <p><strong>Activity:</strong> Stream Conclusion – Final Discussion<br><strong>Time allotment:</strong> 10 minutes</p>
+    </div>
+  </div>
+
+<section id="analytics" style="padding:80px 4vw; text-align:center;">
+  <h2 style="font-size:28px; margin-bottom:30px;">STREAM ANALYTICS</h2>
+
+
+<section id="Analytics" style="padding:40px 4vw;color:var(--muted)">
+  <h2 style="color:#fff;text-align:center;margin-bottom:18px">STREAM SCHEDULE</h2>
+  <!-- TEXT STATS -->
+  <div style="
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:18px;
+    max-width:900px;
+    margin:0 auto 50px;
+  ">
+
+    <div style="background:var(--panel-dark); padding:18px; border:2px solid #000; min-width:220px;">
+      <h4>Stream Duration</h4>
+      <small style="opacity:0.7;">(3h11m last stream)</small>
+      <p style="font-size:22px; margin-top:8px;">2h43m</p>
+    </div>
+
+    <div style="background:var(--panel-dark); padding:18px; border:2px solid #000; min-width:220px;">
+      <h4>Max Viewers</h4>
+      <p style="font-size:22px; margin-top:8px;">4</p>
+    </div>
+
+    <div style="background:var(--panel-dark); padding:18px; border:2px solid #000; min-width:220px;">
+      <h4>Unique Viewers</h4>
+      <p style="font-size:22px; margin-top:8px;">7</p>
+    </div>
+
+    <div style="background:var(--panel-dark); padding:18px; border:2px solid #000; min-width:220px;">
+      <h4>Unique Chatters</h4>
+      <small style="opacity:0.7;">(+1 from last stream)</small>
+      <p style="font-size:22px; margin-top:8px;">5</p>
+    </div>
+
+  </div>
+
+  <h2 style="margin-bottom:20px;">FULL STREAM ANALYTICS</h2>
+
+ <!-- SCREENSHOTS STACKED -->
+  <div style="
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:40px;
+    max-width:1000px;
+    margin:0 auto;
+  ">
+
+    <div style="background:rgba(0,0,0,0.3); border:2px solid #a2ff6c; box-shadow:0 0 25px #a2ff6c, 0 0 50px rgba(162,255,108,0.3); padding:16px; width:100%; transition:all 0.3s;">
+      <img src="https://i.postimg.cc/nzWpNrqJ/Screenshot-2026-02-06-2-41-42-PM.png" alt="Analytics Screenshot 1" style="width:100%; display:block; box-shadow:0 10px 30px rgba(0,0,0,0.6);">
+    </div>
+
+    <div style="background:rgba(0,0,0,0.3); border:2px solid #a2ff6c; box-shadow:0 0 25px #a2ff6c, 0 0 50px rgba(162,255,108,0.3); padding:16px; width:100%; transition:all 0.3s;">
+      <img src="https://i.postimg.cc/J79Bk4vF/Screenshot-2026-02-06-2-42-48-PM.png" alt="Analytics Screenshot 2" style="width:100%; display:block; box-shadow:0 10px 30px rgba(0,0,0,0.6);">
+    </div>
+
+    <div style="background:rgba(0,0,0,0.3); border:2px solid #a2ff6c; box-shadow:0 0 25px #a2ff6c, 0 0 50px rgba(162,255,108,0.3); padding:16px; width:100%; transition:all 0.3s;">
+      <img src="https://i.postimg.cc/vmH1s1xZ/Screenshot-2026-02-06-2-43-39-PM.png" alt="Analytics Screenshot 3" style="width:100%; display:block; box-shadow:0 10px 30px rgba(0,0,0,0.6);">
+    </div>
+
+  </div>
+</section>
+
+
+  <h2 style="margin-bottom:20px;">THANK YOU FOR SUPPORTING AND WATCHING OUR STREAM! WE APPRECIATE IT! WE ALSO ENJOYED STREAMING AS WE GOT TO BOND AND GET TO KNOW EACH OTHER!!</h2>
+
+
+
+<section id="socials" style="padding:80px 4vw; text-align:center; margin-top:60px;">
+  <h2 style="font-size:28px; margin-bottom:20px;">WATCH OUR STREAMS</h2>
+ <a href="https://www.twitch.tv/lifelabs_group_one"
+       target="_blank"
+       style="padding:12px 18px; background:var(--panel-dark); border:2px solid #000; color:var(--muted);
+       text-decoration:none; font-size:14px;">
+       Twitch
+
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="socials" style="padding:80px 4vw; text-align:center; margin-top:60px;">
+  <h2 style="font-size:28px; margin-bottom:20px;">FOLLOW US ON OUR SOCIALS</h2>
+  <p style="font-size:16px; opacity:0.9;">Stay updated with our streams!</p>
+
+  <div style="margin-top:25px; display:flex; justify-content:center; gap:18px; flex-wrap:wrap;">
+
+    <a href="https://www.instagram.com/q2lifelabsg1/?utm_source=ig_web_button_share_sheet"
+       target="_blank"
+       style="padding:12px 18px; background:var(--panel-dark); border:2px solid #000; color:var(--muted);
+       text-decoration:none; font-size:14px;">
+       Instagram
+    </a>
+
+    <a href="https://www.facebook.com/profile.php?id=61583016504960"
+       target="_blank"
+       style="padding:12px 18px; background:var(--panel-dark); border:2px solid #000; color:var(--muted);
+       text-decoration:none; font-size:14px;">
+       Facebook
+    </a>
+
+    <a href="https://www.twitch.tv/lifelabs_group_one"
+       target="_blank"
+       style="padding:12px 18px; background:var(--panel-dark); border:2px solid #000; color:var(--muted);
+       text-decoration:none; font-size:14px;">
+       Twitch
+
+    </a>
+  </div>
+</section>
+</main>
+</div>
+
+<script>
+    
+const intro = document.getElementById('intro');
+const mainSite = document.getElementById('mainSite');
+const unlockBtn = document.getElementById('unlockBtn');
+
+unlockBtn.addEventListener('click', ()=>{
+  intro.style.opacity = 0;
+  setTimeout(()=> {
+    intro.style.display = 'none';
+    mainSite.style.display = 'block';
+   
+    reveal(document.querySelectorAll('.panel'));
+    reveal(document.querySelectorAll('.talent-card'));
+  },600);
+});
+
+
+document.querySelectorAll('.panel').forEach(p=>{
+  p.addEventListener('click', e=>{
+    p.classList.add('break');
+    setTimeout(()=>p.classList.remove('break'),300);
+
+    const sparkle = document.createElement('div');
+    sparkle.style.position = 'absolute';
+    sparkle.style.width = sparkle.style.height = '6px';
+    sparkle.style.background = 'radial-gradient(circle, #a2ff6c, transparent)';
+    sparkle.style.borderRadius = '50%';
+    sparkle.style.left = `${e.offsetX}px`;
+    sparkle.style.top = `${e.offsetY}px`;
+    sparkle.style.pointerEvents = 'none';
+    sparkle.style.zIndex = 10;
+    p.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 500);
+  });
+});
+
+const reveal = (elements) => {
+  const windowHeight = window.innerHeight;
+  elements.forEach(el => {
+    const top = el.getBoundingClientRect().top;
+    if(top < windowHeight - 100){
+      el.classList.add('show');
+    }
+  });
+};
+window.addEventListener('scroll', () => {
+  reveal(document.querySelectorAll('.panel'));
+  reveal(document.querySelectorAll('.talent-card'));
+});
+</script>
+</body>
+</html>
